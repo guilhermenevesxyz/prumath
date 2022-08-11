@@ -11,6 +11,7 @@ namespace Prumath::Lexer {
 	};
 
 	struct Token {
+	public:
 		TokenType type;
 		std::optional<std::string> value;
 	};

@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "lexer.hpp"
-#include "custom_exceptions.hpp"
+#include "exceptions.hpp"
 
 namespace Prumath::Lexer {
 	static const std::map<char, TokenType> token_type_map = {
@@ -43,7 +43,7 @@ namespace Prumath::Lexer {
 				   (c >= '0' && c <= '9')) {
 				current_numtoken += c;
 			} else {
-				throw CustomExceptions::UnexpectedCharacter();
+				throw Exceptions::UnexpectedCharacter(expr);
 				return std::vector<Token>();
 			}
 		}
