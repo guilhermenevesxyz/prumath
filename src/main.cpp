@@ -2,6 +2,7 @@
 
 #include "lexer.hpp"
 #include "syntax.hpp"
+#include "parser.hpp"
 
 int main() {
 	std::string expression;
@@ -16,6 +17,9 @@ int main() {
 		}
 
 		Prumath::Syntax::validate(tokens);
+
+		std::unique_ptr<Prumath::Parser::Node> a = Prumath::Parser::parse(tokens);
+		std::cout << *a << std::endl;
 	}
 
 	return EXIT_SUCCESS;
