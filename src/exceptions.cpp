@@ -1,6 +1,12 @@
 #include "exceptions.hpp"
 
 namespace Prumath::Exceptions {
+	InvalidExpression::InvalidExpression() {}
+
+	const char* InvalidExpression::what() const noexcept {
+		return "Invalid expression.";
+	}
+	
 	ExceptionWithMessage::ExceptionWithMessage(const char* msg)
 		: message(msg) {}
 

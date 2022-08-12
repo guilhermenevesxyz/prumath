@@ -5,18 +5,10 @@
 #include <string>
 #include <vector>
 
+#include "token.hpp"
+
 namespace Prumath::Lexer {
-	enum TokenType {
-		NUM, ADD, SUB, MUL, DIV, MOD
-	};
-
-	struct Token {
-	public:
-		TokenType type;
-		std::optional<std::string> value;
-	};
-
-	std::vector<Token> lex(const std::string& expr);
+	std::vector<Token::Token> lex(std::string& expr);
 }
 
 #endif

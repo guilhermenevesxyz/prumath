@@ -5,6 +5,12 @@
 #include <string>
 
 namespace Prumath::Exceptions {
+	class InvalidExpression : public std::exception {
+	public:
+		explicit InvalidExpression();
+		const char* what() const noexcept override;
+	};
+
 	class ExceptionWithMessage : public std::exception {
 	protected:
 		const std::string message;
