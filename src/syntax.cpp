@@ -14,9 +14,10 @@ namespace Prumath::Syntax {
 					bool has_digit = false;
 
 					for (auto c : token_it->value.value()) {
-						if (c == '.') {
+						if (c == '.' || c == ',') {
 							++sep_count;
-						} else {
+						} else if (c >= '0' &&
+						           c <= '9') {
 							has_digit = true;
 						}
 					}

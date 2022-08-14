@@ -1,3 +1,5 @@
+#include <regex>
+
 #include "parser.hpp"
 #include "exceptions.hpp"
 
@@ -8,37 +10,77 @@ namespace Prumath::Parser {
 		std::vector<Token::Token>::const_iterator token_it;
 		
 		std::unique_ptr<Node> factor() {
-			if (this->token_it->type == Token::TokenType::NUM) {
-				float token_value = 0.0f;
+			switch (this->token_it->type) {
+			case Token::TokenType::NUM:
+				{
+					std::string num_str =
+						std::regex_replace(
+							std::regex_replace(
+								this->token_it->
+								      value
+								      .value(),
+								std::regex(","),
+								"."
+							),
+							std::regex("_"),
+							""
+						);
 
-				try {
-					token_value = std::stof(
-						this->token_it->value.value()
-					);
-				} catch (std::out_of_range e) {
-					throw Exceptions::OutOfRangeNumber(
-						this->token_it->value.value()
-					);
+					float num_float = 0.0f;
 
-					return std::unique_ptr<Node>(nullptr);
-				}
+					try {
+						num_float = std::stof(num_str);
+					} catch (std::out_of_range e) {
+						throw Exceptions::
+							OutOfRangeNumber(
+								this->token_it->
+									value
+									.value()
+							);
 
-				std::advance(this->token_it, 1);
+						return std::unique_ptr<Node>(
+							nullptr);
+					}
 
-				return std::make_unique<Node>(Node {
-					Token::TokenType::NUM,
-					token_value,
-					std::unique_ptr<Node>(nullptr),
-					std::unique_ptr<Node>(nullptr)
-				});
+					std::advance(this->token_it, 1);
+
+					return std::make_unique<Node>(Node {
+						Token::TokenType::NUM,
+						num_float,
+						std::unique_ptr<Node>(nullptr),
+						std::unique_ptr<Node>(nullptr)
+					});
+				} break;
+
+			case Token::TokenType::ADD:
+			case Token::TokenType::SUB:
+				{
+					const auto token_type = this->token_it->
+						type;
+
+					std::advance(this->token_it, 1);
+					
+					return std::make_unique<Node>(Node {
+						token_type,
+						std::nullopt,
+						std::make_unique<Node>(Node {
+							Token::TokenType::NUM,
+							0.0f,
+							std::unique_ptr<Node>(
+								nullptr
+							),
+							std::unique_ptr<Node>(
+								nullptr
+							)
+						}),
+						factor()
+					});
+				} break;
+
+			default:
+				return std::unique_ptr<Node>(nullptr);
+				break;
 			}
-
-			/*
-			 * TODO
-			 */
-			throw Exceptions::ExceptionWithMessage("1");
-
-			return std::unique_ptr<Node>(nullptr);
 		}
 
 		std::unique_ptr<Node> term() {
@@ -88,14 +130,6 @@ namespace Prumath::Parser {
 
 		std::unique_ptr<Node> parse_expression() {
 			auto result = this->expression();
-
-			if (this->token_it != this->tokens.end()) {
-				/*
-				 * TODO
-				 */
-				throw Exceptions::ExceptionWithMessage("0");
-			}
-
 			return result;
 		}
 	};

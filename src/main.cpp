@@ -18,8 +18,8 @@ int main() {
 
 		Prumath::Syntax::validate(tokens);
 
-		std::unique_ptr<Prumath::Parser::Node> a = Prumath::Parser::parse(tokens);
-		std::cout << *a << std::endl;
+		auto ast = Prumath::Parser::parse(tokens);
+		std::cout << *ast << std::endl;
 	}
 
 	return EXIT_SUCCESS;
