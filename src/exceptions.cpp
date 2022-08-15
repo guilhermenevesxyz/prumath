@@ -25,15 +25,15 @@ namespace Prumath::Exceptions {
 
 	UnexpectedCharacter::UnexpectedCharacter(const char* msg)
 		: ExceptionWithMessage(
-			std::string("Unexpected character in expression \"")
-				.append(msg).append("\".")
+			std::string("Unexpected character \"").append(msg)
+				.append("\" in expression.")
 		  ) {}
 
 	UnexpectedCharacter::UnexpectedCharacter(const std::string& msg)
 		: ExceptionWithMessage(
-			std::string("Unexpected character in expression \"")
-				.append(msg).append("\".")
-		   ) {}
+			std::string("Unexpected character \"").append(msg)
+				.append("\" in expression.")
+		  ) {}
 
 	const char* UnexpectedCharacter::what() const noexcept {
 		return this->message.c_str();

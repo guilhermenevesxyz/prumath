@@ -53,7 +53,10 @@ namespace Prumath::Lexer {
 					current_numtoken = "";
 				}
 			} else {
-				throw Exceptions::UnexpectedCharacter(expr);
+				throw Exceptions::UnexpectedCharacter(
+					std::string(1, c)
+				);
+
 				return std::vector<Token::Token>();
 			}
 		}
