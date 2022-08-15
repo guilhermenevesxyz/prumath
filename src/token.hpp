@@ -6,7 +6,7 @@
 
 namespace Prumath::Token {
 	enum TokenType {
-		NUM, ADD, SUB, MUL, DIV, MOD
+		NUM, ADD, SUB, MUL, DIV, MOD, GRT, SMT, EQS
 	};
 
 	struct Token {

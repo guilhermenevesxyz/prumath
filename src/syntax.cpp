@@ -43,6 +43,9 @@ namespace Prumath::Syntax {
 			case Token::TokenType::MUL:
 			case Token::TokenType::DIV:
 			case Token::TokenType::MOD:
+			case Token::TokenType::GRT:
+			case Token::TokenType::SMT:
+			case Token::TokenType::EQS:
 				{
 					const auto next_token_it =
 						std::next(token_it);

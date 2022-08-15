@@ -1,4 +1,5 @@
 #include <regex>
+#include <functional>
 
 #include "parser.hpp"
 #include "exceptions.hpp"
@@ -8,6 +9,29 @@ namespace Prumath::Parser {
 	private:
 		const std::vector<Token::Token>& tokens;
 		std::vector<Token::Token>::const_iterator token_it;
+
+		std::unique_ptr<Node> binary_operation_rule(
+			std::function<std::unique_ptr<Node>()> requirement,
+			const std::vector<Token::TokenType>& operations
+		) {
+			auto result = requirement();
+
+			while (std::find(operations.begin(), operations.end(),
+			       this->token_it->type) != operations.end()) {
+				const auto token_type = this->token_it->type;
+
+				std::advance(this->token_it, 1);
+
+				result = std::make_unique<Node>(Node {
+					token_type,
+					std::nullopt,
+					std::move(result),
+					requirement()
+				});
+			}
+
+			return result;
+		}
 		
 		std::unique_ptr<Node> factor() {
 			switch (this->token_it->type) {
@@ -73,7 +97,7 @@ namespace Prumath::Parser {
 								nullptr
 							)
 						}),
-						factor()
+						this->factor()
 					});
 				} break;
 
@@ -84,43 +108,28 @@ namespace Prumath::Parser {
 		}
 
 		std::unique_ptr<Node> term() {
-			auto result = factor();
-
-			while (this->token_it->type == Token::TokenType::MUL ||
-			       this->token_it->type == Token::TokenType::DIV) {
-				const auto token_type = this->token_it->type;
-
-				std::advance(this->token_it, 1);
-
-				result = std::make_unique<Node>(Node {
-					token_type,
-					std::nullopt,
-					std::move(result),
-					factor()
-				});
-			}
-
-			return result;
+			return this->binary_operation_rule(
+				std::bind(&Parser::factor, this),
+				{ Token::TokenType::MUL, Token::TokenType::DIV }
+			);
 		}
 
 		std::unique_ptr<Node> expression() {
-			auto result = term();
+			return this->binary_operation_rule(
+				std::bind(&Parser::term, this),
+				{ Token::TokenType::ADD, Token::TokenType::SUB }
+			);
+		}
 
-			while (this->token_it->type == Token::TokenType::ADD ||
-			       this->token_it->type == Token::TokenType::SUB) {
-				const auto token_type = this->token_it->type;
-
-				std::advance(this->token_it, 1);
-				
-				result = std::make_unique<Node>(Node {
-					token_type,
-					std::nullopt,
-					std::move(result),
-					term()
-				});
-			}
-
-			return result;
+		std::unique_ptr<Node> comparison() {
+			return this->binary_operation_rule(
+				std::bind(&Parser::expression, this),
+				{
+					Token::TokenType::GRT,
+					Token::TokenType::SMT,
+					Token::TokenType::EQS
+				}
+			);
 		}
 
 	public:
@@ -129,7 +138,7 @@ namespace Prumath::Parser {
 			  token_it(this->tokens.begin()) {}
 
 		std::unique_ptr<Node> parse_expression() {
-			auto result = this->expression();
+			auto result = this->comparison();
 			return result;
 		}
 	};

@@ -9,7 +9,10 @@ namespace Prumath::Lexer {
 		{ '-', Token::TokenType::SUB },
 		{ '*', Token::TokenType::MUL },
 		{ '/', Token::TokenType::DIV },
-		{ '%', Token::TokenType::MOD }
+		{ '%', Token::TokenType::MOD },
+		{ '>', Token::TokenType::GRT },
+		{ '<', Token::TokenType::SMT },
+		{ '=', Token::TokenType::EQS }
 	};
 
 	std::vector<Token::Token> lex(const std::string& expr) {
