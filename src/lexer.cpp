@@ -12,7 +12,9 @@ namespace Prumath::Lexer {
 		{ '%', Token::TokenType::MOD },
 		{ '>', Token::TokenType::GRT },
 		{ '<', Token::TokenType::SMT },
-		{ '=', Token::TokenType::EQS }
+		{ '=', Token::TokenType::EQS },
+		{ '(', Token::TokenType::LPA },
+		{ ')', Token::TokenType::RPA }
 	};
 
 	std::vector<Token::Token> lex(const std::string& expr) {

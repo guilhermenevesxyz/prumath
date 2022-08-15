@@ -6,6 +6,12 @@ namespace Prumath::Exceptions {
 	const char* InvalidExpression::what() const noexcept {
 		return "Invalid expression.";
 	}
+
+	UnmatchedParenthesis::UnmatchedParenthesis() {}
+
+	const char* UnmatchedParenthesis::what() const noexcept {
+		return "Unmached parenthesis in expression.";
+	}
 	
 	ExceptionWithMessage::ExceptionWithMessage(const char* msg)
 		: message(msg) {}

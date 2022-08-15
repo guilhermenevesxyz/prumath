@@ -100,6 +100,14 @@ namespace Prumath::Parser {
 						this->factor()
 					});
 				} break;
+			
+			case Token::TokenType::LPA:
+				{
+					std::advance(this->token_it, 1);
+					auto result = this->expression();
+					std::advance(this->token_it, 1);
+					return result;
+				} break;
 
 			default:
 				return std::unique_ptr<Node>(nullptr);

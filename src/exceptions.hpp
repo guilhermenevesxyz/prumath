@@ -11,6 +11,12 @@ namespace Prumath::Exceptions {
 		const char* what() const noexcept override;
 	};
 
+	class UnmatchedParenthesis : public std::exception {
+	public:
+		explicit UnmatchedParenthesis();
+		const char* what() const noexcept override;
+	};
+
 	class ExceptionWithMessage : public std::exception {
 	protected:
 		const std::string message;

@@ -5,6 +5,8 @@ namespace Prumath::Syntax {
 	/* Checks whether a token expression has a valid syntax according to
 	 * the rules for mathematical expressions. */
 	void validate(const std::vector<Token::Token>& tokens) {
+		size_t lpars = 0, rpars = 0;
+
 		for (auto token_it = tokens.begin(); token_it != tokens.end();
 		     std::advance(token_it, 1)) {
 			switch (token_it->type) {
@@ -47,8 +49,11 @@ namespace Prumath::Syntax {
 			case Token::TokenType::SMT:
 			case Token::TokenType::EQS:
 				{
-					const auto next_token_it =
-						std::next(token_it);
+					const auto
+						next_token_it =
+							std::next(token_it),
+						prev_token_it =
+							std::prev(token_it);
 
 					if (token_it == tokens.begin() ||
 				    	    next_token_it == tokens.end()) {
@@ -57,14 +62,29 @@ namespace Prumath::Syntax {
 						return;
 					}
 
-					if (std::prev(token_it)->type !=
-					    Token::TokenType::NUM) {
+					if (prev_token_it->type !=
+					    Token::TokenType::NUM &&
+					    prev_token_it->type !=
+					    Token::TokenType::RPA) {
 						throw Exceptions::
 							InvalidExpression();
 						return;
 					}
 				} break;
+			
+			case Token::TokenType::LPA:
+				++lpars;
+				break;
+			
+			case Token::TokenType::RPA:
+				++rpars;
+				break;
 			}
+		}
+
+		if (lpars != rpars) {
+			throw Exceptions::UnmatchedParenthesis();
+			return;
 		}
 	}
 }
