@@ -1,5 +1,6 @@
 # Builds
 /bin
+/lib
 /obj
 
 # GNU Make

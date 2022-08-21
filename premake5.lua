@@ -16,11 +16,11 @@ workspace "prumath"
 		architecture "x86_64"
 
 	project "prumath"
-		kind "ConsoleApp"
+		kind "StaticLib"
 		language "C++"
 		cppdialect "C++20"
 
-		targetdir "%{prj.location}/bin/"
+		targetdir "%{prj.location}/lib/"
 		objdir "%{prj.location}/obj/"
 
 		files "src/**.cpp"
